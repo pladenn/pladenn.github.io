@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)http://localhost:9966/lesson/1 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+    </head>
+
+    <body>
+        <h2>Урок №</h2>
+        <br><br>
+
+        <h3>Новые слова</h3>
+        <div id="new_words"><div style="display: inline;"><div style="display: inline; cursor: pointer; border: none black;">as - я</div><div style="border-width: 3px; border-color: black; border-style: solid; display: none; width: fit-content; position: absolute; background-color: white; top: 180.25px; left: 8px;"><div>я</div><h4>Доступные переводы:</h4><div>я</div><div>я1</div></div></div><div style="display: inline;"><div style="display: inline; cursor: pointer;"><br></div></div><div style="display: inline;"><div style="display: inline; cursor: pointer; border: none black;">tu - ты</div><div style="border-width: 3px; border-color: black; border-style: solid; display: none; width: fit-content; position: absolute; background-color: white;"><div>ты</div><h4>Доступные переводы:</h4><div>ты</div></div></div><div style="display: inline;"><div style="display: inline; cursor: pointer;"><br></div></div><div style="display: inline;"><div style="display: inline; cursor: pointer; border: none black;">eiti - идти</div><div style="border-width: 3px; border-color: black; border-style: solid; display: none; width: fit-content; position: absolute; background-color: white;"><div>идти</div><h4>Доступные переводы:</h4><div>идти</div></div></div></div>
+        <br><br>
+
+        <h3>Повторение</h3>
+        <div id="review_words"></div>
+        <br><br>
+
+        <h3>Примеры</h3>
+        <div id="examples"><div style="display: inline;"><div style="display: inline; cursor: pointer;">as</div><div style="border-width: 3px; border-color: black; border-style: solid; display: none; width: fit-content; position: absolute; background-color: white;"><div>я</div><h4>Доступные переводы:</h4><div>я</div></div></div><div style="display: inline;"><div style="display: inline; cursor: pointer;"> </div></div><div style="display: inline;"><div style="display: inline; cursor: pointer;">tu</div><div style="border-width: 3px; border-color: black; border-style: solid; display: none; width: fit-content; position: absolute; background-color: white;"><div>ты</div><h4>Доступные переводы:</h4><div>ты</div></div></div><div style="display: inline;"><div style="display: inline; cursor: pointer;"> </div></div><div style="display: inline;"><div style="display: inline; cursor: pointer;">eiti</div><div style="border-width: 3px; border-color: black; border-style: solid; display: none; width: fit-content; position: absolute; background-color: white;"><div>идти</div><h4>Доступные переводы:</h4><div>идти</div></div></div></div>
+
+        <script>
+
+            function createElement(element) {
+                return document.createElement(element);
+            }
+
+            function createElementWithText(element, text) {
+                let elem = createElement(element);
+                elem.innerText = text;
+                return elem;
+            }
+
+            function createDiv() {
+                return createElement("div");
+            }
+
+            function createDivWithClass(className) {
+                var div = createDiv();
+                div.className = className;
+                return div;
+            }
+
+            const BLACK = "black";
+            const THIN_BORDER = "1px";
+            const THICK_BORDER = "3px";
+
+            class ContentItem {
+
+                constructor(sourceContentItem, openDropDownContent, fullContent) {
+                    this.openDropDownContent = openDropDownContent;
+
+                    this.fullContent = fullContent;
+                    this.sourceContentItem = sourceContentItem;
+                    this.open = false;
+                    this.highlighted = false;
+
+                    this.mouseover = false;
+                    this.specific = sourceContentItem.specific;
+                    this.sourceWord = sourceContentItem.sourceWord;
+
+                    this.compose = this.createCompose();
+                    this.ruWordComponent = this.createRuWordComponent();
+                    this.compose.appendChild(this.ruWordComponent);
+                    let component = this;
+                    this.ruWordComponent.onmouseover = function () {
+                        component.onmouseover()
+                    };
+
+                    this.ruWordComponent.onmouseout = function () {
+                        component.onmouseout()
+                    };
+                    if (!this.sourceContentItem.specific) {
+                        this.ltWordComponentDropDownContent = this.createDropDownContent();
+                        this.compose.appendChild(this.ltWordComponentDropDownContent);
+                        this.addTranslations();
+                        let component = this;
+                        component.compose.onclick = function () {
+                            component.openCloseDropDownContent();
+                        }
+                    }
+
+                }
+
+                createCompose() {
+                    let element = createDiv();
+                    element.style.display = "inline";
+                    return element;
+                }
+
+                setView() {
+                    let color = BLACK;
+                    let borderPresent = false;
+                    let borderWidth = THIN_BORDER;
+
+                    if (this.specific) {
+                        return;
+                    }
+
+                    if (this.open || this.mouseover) {
+                        borderPresent = true;
+                    }
+
+                    if (this.open) {
+                        borderWidth = THICK_BORDER;
+                    }
+
+                    this.setStateStyle(color, borderPresent, borderWidth);
+                }
+
+                setStateStyle(color, borderPresent, borderWidth) {
+                    let ruWordComponent = this.ruWordComponent;
+                    let dropDownContent = this.ltWordComponentDropDownContent;
+
+                    ruWordComponent.style.borderStyle = "solid";
+
+                    if (borderPresent) {
+                        ruWordComponent.style.borderWidth = borderWidth;
+                    } else {
+                        ruWordComponent.style.border = "none";
+                    }
+
+                    ruWordComponent.style.borderColor = color;
+
+                    if (dropDownContent != null) {
+                        dropDownContent.style.borderColor = color;
+                    }
+                }
+
+                openCloseDropDownContent() {
+                    let element = this.ltWordComponentDropDownContent;
+                    let current = element.style.display;
+
+                    if (current === "block") {
+                        this.closeDropDownContent();
+                    } else {
+                        element.style.display = "block";
+                        element.style.top = this.ruWordComponent.getBoundingClientRect().bottom + 'px';
+                        element.style.left = this.ruWordComponent.getBoundingClientRect().left + 'px';
+                        this.open = true;
+                        this.openDropDownContent(this);
+                        this.setView();
+                    }
+                }
+
+                closeDropDownContent() {
+                    let element = this.ltWordComponentDropDownContent;
+                    element.style.display = "none";
+                    this.open = false;
+                    this.setView();
+                }
+
+                addTranslations() {
+                    this.ltWordComponentDropDownContent.appendChild(createElementWithText("div", this.sourceContentItem.translationText));
+                    this.ltWordComponentDropDownContent.appendChild(createElementWithText("h4", "Доступные переводы:"))
+                    let translations = this.sourceContentItem.word.translations;
+                    for (let translation of translations) {
+                        this.ltWordComponentDropDownContent.appendChild(createElementWithText("div", translation.word));
+                    }
+                }
+
+                createDropDownContent() {
+                    let element = createDiv();
+                    element.style.borderWidth = THICK_BORDER;
+                    element.style.borderColor = BLACK;
+                    element.style.borderStyle = "solid";
+                    element.style.display = "none";
+                    element.style.width = "fit-content";
+                    element.style.position = "absolute";
+                    element.style.backgroundColor = "white";
+
+
+                    return element;
+                }
+
+                createRuWordComponent() {
+                    let element = createDiv();
+                    element.style.display = "inline";
+                    element.style.cursor = "pointer";
+                    element.innerText = this.sourceContentItem.sourceWord;
+                    if (this.fullContent && !this.specific) {
+                        element.innerText = element.innerText + " - " + this.sourceContentItem.translationText;
+                    }
+                    return element;
+                }
+
+                onmouseover() {
+                    this.mouseover = true;
+                    this.setView();
+                }
+
+                onmouseout() {
+                    this.mouseover = false;
+                    this.setView();
+                };
+            }
+
+            class ContentComponent {
+                constructor(contentArea, fullContent) {``
+                    this.contentArea = contentArea;
+                    this.currentOpenContentItem = null;
+                    this.allContentItems = [];
+                    this.fullContent = fullContent;
+                }
+
+                addContentItem(contentItem) {
+                    this.contentArea.appendChild(contentItem.compose);
+                    this.allContentItems.push(contentItem);
+                }
+
+                openLtRuComponent(ltRuComponent) {
+                    if (this.currentOpenContentItem === null) {
+                        this.currentOpenContentItem = ltRuComponent;
+                        return;
+                    }
+
+                    if (this.currentOpenContentItem !== ltRuComponent) {
+                        this.currentOpenContentItem.closeDropDownContent();
+                        this.currentOpenContentItem = ltRuComponent;
+                    }
+                }
+
+            }
+
+            function fillContent(data, contentArea, fullContent) {
+                contentArea.innerHTML = "";
+                let contentComponent = new ContentComponent(contentArea, fullContent);
+
+                let openLtRuComponent = function (ltRuComponent) {
+                    contentComponent.openLtRuComponent(ltRuComponent);
+                }
+
+                for (let sourceContentItem of data) {
+                    contentComponent.addContentItem(new ContentItem(sourceContentItem, openLtRuComponent, fullContent));
+                }
+            }
+
+            let newWords = [{"sourceWord":"as","specific":false,"order":0,"translationId":"5a02a00e-ced4-4a74-bd8f-3524518eea83","translationText":"я","word":{"word":"as","translations":[{"word":"я","translationId":"5a02a00e-ced4-4a74-bd8f-3524518eea83"},{"word":"я1","translationId":"6ca5c02a-8213-47c1-ab0d-bad1c9de8126"}]},"placeholder":false},{"sourceWord":"\n","specific":true,"order":1,"translationId":"72af7f7d-a1e1-4d2d-986d-dc2be3b05c9f","translationText":"-","word":{"word":"-","translations":[{"word":"-","translationId":"72af7f7d-a1e1-4d2d-986d-dc2be3b05c9f"}]},"placeholder":false},{"sourceWord":"tu","specific":false,"order":2,"translationId":"76df22d9-f707-4d3a-b006-e71d70567c25","translationText":"ты","word":{"word":"tu","translations":[{"word":"ты","translationId":"76df22d9-f707-4d3a-b006-e71d70567c25"}]},"placeholder":false},{"sourceWord":"\n","specific":true,"order":3,"translationId":"72af7f7d-a1e1-4d2d-986d-dc2be3b05c9f","translationText":"-","word":{"word":"-","translations":[{"word":"-","translationId":"72af7f7d-a1e1-4d2d-986d-dc2be3b05c9f"}]},"placeholder":false},{"sourceWord":"eiti","specific":false,"order":4,"translationId":"43a1ef2c-7ea2-4a47-86bc-a55cf27a3cac","translationText":"идти","word":{"word":"eiti","translations":[{"word":"идти","translationId":"43a1ef2c-7ea2-4a47-86bc-a55cf27a3cac"}]},"placeholder":false}];
+            let reviewWords = [];
+            let examples = [{"sourceWord":"as","specific":false,"order":0,"translationId":"5a02a00e-ced4-4a74-bd8f-3524518eea83","translationText":"я","word":{"word":"as","translations":[{"word":"я","translationId":"5a02a00e-ced4-4a74-bd8f-3524518eea83"}]},"placeholder":false},{"sourceWord":" ","specific":true,"order":1,"translationId":"72af7f7d-a1e1-4d2d-986d-dc2be3b05c9f","translationText":"-","word":{"word":"-","translations":[{"word":"-","translationId":"72af7f7d-a1e1-4d2d-986d-dc2be3b05c9f"},{"word":"-","translationId":"72af7f7d-a1e1-4d2d-986d-dc2be3b05c9f"}]},"placeholder":false},{"sourceWord":"tu","specific":false,"order":2,"translationId":"76df22d9-f707-4d3a-b006-e71d70567c25","translationText":"ты","word":{"word":"tu","translations":[{"word":"ты","translationId":"76df22d9-f707-4d3a-b006-e71d70567c25"}]},"placeholder":false},{"sourceWord":" ","specific":true,"order":3,"translationId":"72af7f7d-a1e1-4d2d-986d-dc2be3b05c9f","translationText":"-","word":{"word":"-","translations":[{"word":"-","translationId":"72af7f7d-a1e1-4d2d-986d-dc2be3b05c9f"},{"word":"-","translationId":"72af7f7d-a1e1-4d2d-986d-dc2be3b05c9f"}]},"placeholder":false},{"sourceWord":"eiti","specific":false,"order":4,"translationId":"43a1ef2c-7ea2-4a47-86bc-a55cf27a3cac","translationText":"идти","word":{"word":"eiti","translations":[{"word":"идти","translationId":"43a1ef2c-7ea2-4a47-86bc-a55cf27a3cac"}]},"placeholder":false}];
+
+            fillContent(newWords, document.getElementById("new_words"), true);
+            fillContent(reviewWords, document.getElementById("review_words"), true);
+            fillContent(examples, document.getElementById("examples"), false);
+        </script>
+    
+</body></html>
