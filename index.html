@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)http://localhost:9966/lessons -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <h2>Уроки</h2>
+        <br><br>
+        <div id="links"><a href="http://localhost:9966/lessons/1/lesson">Урок 1</a><br><a href="http://localhost:9966/lessons/1/task">Задание к уроку 1</a><br><br><a href="http://localhost:9966/lessons/2/lesson">Урок 2</a><br><a href="http://localhost:9966/lessons/2/task">Задание к уроку 2</a><br><br></div>
+
+        <script>
+            function createElement(element) {
+                return document.createElement(element);
+            }
+
+            let links = document.getElementById("links");
+            links.innerHTML = '';
+
+            let lessons = {"1":true,"2":true};
+
+            for (let number in lessons) {
+                let link = createElement("a");
+                let redirectUrl = new URL(window.location.origin);
+                redirectUrl.pathname = "/lessons/" + number + "/lesson";
+                link.href = redirectUrl.href;
+                link.innerText = "Урок " + number;
+                links.appendChild(link);
+                links.appendChild(createElement("br"));
+
+                if (lessons[number]) {
+                    let task = createElement("a");
+                    let redirectUrl = new URL(window.location.origin);
+                    redirectUrl.pathname = "/lessons/" + number + "/task";
+                    task.href = redirectUrl.href;
+                    task.innerText = "Задание к уроку " + number;
+                    links.appendChild(task);
+                    links.appendChild(createElement("br"));
+
+                }
+                links.appendChild(createElement("br"));
+            }
+
+        </script>
+    
+</body></html>
