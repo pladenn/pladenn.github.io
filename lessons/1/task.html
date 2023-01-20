@@ -200,7 +200,7 @@
                     this.compose.style.borderStyle = "solid";
                     this.compose.style.padding = "4px";
                     this.compose.style.borderWidth = THICK_BORDER;
-                    if (this.taskField.value === this.sourceWord) {
+                    if (this.taskField.value.toLowerCase() === this.sourceWord.toLowerCase()) {
                         this.compose.style.borderColor = GREEN;
                         return;
                     }
