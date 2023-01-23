@@ -1,14 +1,15 @@
+
+
 <!DOCTYPE html>
-<!-- saved from url=(0029)http://localhost:9966/lessons -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 
     <body>
-        <h2>Уроки</h2>
-        <br><br>
-        <div id="links"><a href="http://localhost:9966/lessons/1/lesson">Урок 1</a><br><a href="http://localhost:9966/lessons/1/task">Задание к уроку 1</a><br><br><a href="http://localhost:9966/lessons/2/lesson">Урок 2</a><br><a href="http://localhost:9966/lessons/2/task">Задание к уроку 2</a><br><br></div>
+        <h2>Уроки литовского языка</h2>
+        <div id="links"></div>
 
         <script>
             function createElement(element) {
@@ -18,7 +19,7 @@
             let links = document.getElementById("links");
             links.innerHTML = '';
 
-            let lessons = {"1":true,"2":true};
+            let lessons = {"1":true};
 
             for (let number in lessons) {
                 let link = createElement("a");
@@ -43,5 +44,5 @@
             }
 
         </script>
-    
-</body></html>
+    </body>
+</html>
